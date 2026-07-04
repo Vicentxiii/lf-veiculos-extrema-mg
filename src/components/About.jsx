@@ -4,7 +4,7 @@ import MagicBento from './MagicBento';
 const About = () => {
   return (
     <section className="about" id="diferenciais">
-      <div className="section-head" style={{ marginBottom: '20px' }}>
+      <div className="section-head" style={{ marginBottom: '20px', justifyContent: 'center', textAlign: 'center' }}>
         <div>
           <span className="tag">Por que a LF</span>
           <h2>Confiança que se vê no acabamento.</h2>

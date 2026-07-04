@@ -1,72 +1,91 @@
-import React, { useMemo } from 'react';
-import Carousel from './Carousel';
+import React, { useRef, useState, useCallback, useEffect } from 'react';
 
 const fleet = [
-  {make:'Ford', name:'Fiesta SE Sedan', specs:['Manual','1.6 Flex','138.007 km'], body:'sedan'},
-  {make:'Honda', name:'Civic EXL', specs:['Automático','2.0 Flex','97.000 km'], body:'sedan'},
-  {make:'Honda', name:'HR-V EX', specs:['Automático','1.8 Flex','195.000 km'], body:'suv'},
-  {make:'Fiat', name:'Toro Endurance', specs:['Manual','1.8 Flex','89.000 km'], body:'pickup'},
-  {make:'Hyundai', name:'HB20 Comfort Plus', specs:['Manual','1.6 Flex','139.000 km'], body:'hatch'},
-  {make:'Volkswagen', name:'Fox GII', specs:['Manual','1.0 Flex','139.000 km'], body:'hatch'},
-  {make:'Fiat', name:'Fastback Audace', specs:['Manual','1.6 Flex','42.000 km'], body:'suv'},
-  {make:'Chevrolet', name:'Prisma LT', specs:['Automática','1.4 Flex','139.000 km'], body:'sedan'},
-  {make:'Volkswagen', name:'Polo Comfortline', specs:['Automático','1.0 TSI Flex','81.000 km'], body:'hatch'},
-  {make:'Volkswagen', name:'Virtus MSI', specs:['Automático','1.6 Flex','194.250 km'], body:'sedan'},
-  {make:'Chevrolet', name:'S-10 High Country', specs:['Automática','2.8 4x4 Diesel','105.000 km'], body:'pickup'},
-  {make:'Fiat', name:'Toro Volcano', specs:['Automática','2.0 4x4 Diesel','76.900 km'], body:'pickup'},
+  {make:'Ford', name:'Fiesta SE Sedan', specs:['Manual','1.6 Flex','138.007 km'], body:'sedan', img:'Fiesta se Sedan.jpg', badge:'💰 Melhor preço', price:'R$ 44.070'},
+  {make:'Honda', name:'Civic EXL', specs:['Automático','2.0 Flex','97.000 km'], body:'sedan', img:'Civic EXL.jpg', badge:'🏅 Mais vendido', price:'R$ 127.568'},
+  {make:'Honda', name:'HR-V EX', specs:['Automático','1.8 Flex','195.000 km'], body:'suv', img:'HR-VEX.webp', price:'R$ 104.940'},
+  {make:'Fiat', name:'Toro Endurance', specs:['Manual','1.8 Flex','89.000 km'], body:'pickup', img:'Toro Endurance.jpeg', price:'R$ 85.638'},
+  {make:'Hyundai', name:'HB20 Comfort Plus', specs:['Manual','1.6 Flex','139.000 km'], body:'hatch', img:'HB20 Comfort Plus.jpg', badge:'🔥 Mais popular', price:'R$ 55.603'},
+  {make:'Volkswagen', name:'Fox GII', specs:['Manual','1.0 Flex','139.000 km'], body:'hatch', img:'FOX GII.jpg', price:'R$ 35.826'},
+  {make:'Fiat', name:'Fastback Audace', specs:['Manual','1.6 Flex','42.000 km'], body:'suv', img:'FastBack Audace.webp', badge:'⭐ Tops da semana', price:'R$ 110.324'},
+  {make:'Chevrolet', name:'Prisma LT', specs:['Automática','1.4 Flex','139.000 km'], body:'sedan', img:'Prisma LT.jpg', badge:'💰 Melhor preço', price:'R$ 60.396'},
+  {make:'Volkswagen', name:'Polo Comfortline', specs:['Automático','1.0 TSI Flex','81.000 km'], body:'hatch', img:'Polo Comfortline.jpg', badge:'🔥 Mais popular', price:'R$ 78.948'},
+  {make:'Volkswagen', name:'Virtus MSI', specs:['Automático','1.6 Flex','194.250 km'], body:'sedan', img:'Virtus MSI.jpg', price:'R$ 73.148'},
+  {make:'Chevrolet', name:'S-10 High Country', specs:['Automática','2.8 4x4 Diesel','105.000 km'], body:'pickup', img:'S-10 High Country.jpg', badge:'⭐ Tops da semana', price:'R$ 173.652'},
+  {make:'Fiat', name:'Toro Volcano', specs:['Automática','2.0 4x4 Diesel','76.900 km'], body:'pickup', img:'Toro Volcano.webp', badge:'🏅 Mais vendido', price:'R$ 112.194'},
 ];
 
-const icons = {
-  sedan: <svg viewBox="0 0 200 90" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 62 L22 62 L34 38 C40 30 52 26 66 26 L128 26 C142 26 152 30 160 40 L176 62 L190 62 L190 70 L10 70 Z" fill="#efece8" opacity="0.92"/><path d="M56 40 L70 30 L124 30 L142 40 Z" fill="#0a0908" opacity="0.85"/><circle cx="52" cy="68" r="13" fill="#0a0908"/><circle cx="52" cy="68" r="6" fill="#efece8"/><circle cx="150" cy="68" r="13" fill="#0a0908"/><circle cx="150" cy="68" r="6" fill="#efece8"/><rect x="14" y="58" width="16" height="5" fill="#e01a35"/><rect x="172" y="58" width="14" height="5" fill="#e01a35"/></svg>,
-  suv: <svg viewBox="0 0 200 90" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 62 L20 62 L28 34 C34 26 46 22 62 22 L134 22 C150 22 162 26 170 36 L182 62 L192 62 L192 72 L8 72 Z" fill="#efece8" opacity="0.92"/><path d="M50 34 L64 24 L132 24 L152 36 Z" fill="#0a0908" opacity="0.85"/><circle cx="50" cy="70" r="14" fill="#0a0908"/><circle cx="50" cy="70" r="6.5" fill="#efece8"/><circle cx="152" cy="70" r="14" fill="#0a0908"/><circle cx="152" cy="70" r="6.5" fill="#efece8"/><rect x="12" y="58" width="16" height="5" fill="#e01a35"/><rect x="174" y="58" width="14" height="5" fill="#e01a35"/></svg>,
-  pickup: <svg viewBox="0 0 200 90" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 60 L18 60 L26 32 C31 25 42 21 56 21 L96 21 L96 60 L6 60Z" fill="#efece8" opacity="0.92"/><path d="M46 33 L58 24 L92 24 L92 33 Z" fill="#0a0908" opacity="0.85"/><rect x="96" y="34" width="98" height="26" fill="#efece8" opacity="0.92"/><rect x="102" y="38" width="86" height="4" fill="#0a0908" opacity="0.5"/><circle cx="46" cy="68" r="13" fill="#0a0908"/><circle cx="46" cy="68" r="6" fill="#efece8"/><circle cx="160" cy="68" r="13" fill="#0a0908"/><circle cx="160" cy="68" r="6" fill="#efece8"/><rect x="10" y="56" width="14" height="5" fill="#e01a35"/></svg>,
-  hatch: <svg viewBox="0 0 200 90" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 62 L26 62 L36 36 C41 28 52 24 66 24 L118 24 C132 24 142 30 148 42 L162 62 L184 62 L184 70 L14 70 Z" fill="#efece8" opacity="0.92"/><path d="M58 36 L70 27 L114 27 L130 40 Z" fill="#0a0908" opacity="0.85"/><circle cx="54" cy="68" r="13" fill="#0a0908"/><circle cx="54" cy="68" r="6" fill="#efece8"/><circle cx="146" cy="68" r="13" fill="#0a0908"/><circle cx="146" cy="68" r="6" fill="#efece8"/><rect x="18" y="58" width="14" height="5" fill="#e01a35"/><rect x="168" y="58" width="14" height="5" fill="#e01a35"/></svg>,
-};
-
 const Fleet = () => {
-  // Map fleet data to Carousel expected format
-  const carouselItems = useMemo(() => {
-    return fleet.map((car, index) => {
-      const msg = encodeURIComponent(`Olá! Tenho interesse no ${car.make} ${car.name} do pátio da LF Veículos.`);
-      
-      // Creating the description with specs, make, price and contact button
-      const descriptionContent = (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <div className="make" style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#e01a35', fontWeight: 700 }}>
-            {car.make}
-          </div>
-          
-          <div className="car-specs" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-            {car.specs.map((s, i) => (
-              <span key={i} style={{ fontSize: '11px', color: '#8f8a86', border: '1px solid rgba(246,244,241,0.12)', padding: '5px 10px', borderRadius: '20px', letterSpacing: '0.02em' }}>
-                {s}
-              </span>
-            ))}
-          </div>
-          
-          <div className="car-foot" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '16px', borderTop: '1px solid rgba(246,244,241,0.08)' }}>
-            <div className="car-price" style={{ display: 'flex', flexDirection: 'column' }}>
-              <div className="label" style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.12em', color: '#58534f' }}>Valor</div>
-              <div className="value" style={{ fontFamily: '"Bebas Neue"', fontSize: '18px', color: '#f6f4f1', letterSpacing: '0.02em' }}>Sob consulta</div>
-            </div>
-            <a className="car-link" href={`https://wa.me/5535998259732?text=${msg}`} target="_blank" rel="noopener noreferrer" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 700, color: '#f6f4f1', display: 'flex', alignItems: 'center', gap: '6px', padding: '9px 14px', border: '1px solid rgba(246,244,241,0.25)', background: 'rgba(246,244,241,0.05)', borderRadius: '999px', textDecoration: 'none' }}>
-              Detalhes →
-            </a>
-          </div>
-        </div>
-      );
+  const carouselRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragState = useRef({
+    startX: 0, scrollLeft: 0, clicked: false,
+    vel: 0, lastX: 0, lastTime: 0,
+  });
+  const momentumRef = useRef(null);
 
-      return {
-        id: index,
-        title: car.name,
-        description: descriptionContent,
-        icon: icons[car.body]
-      };
-    });
+  const onMouseDown = useCallback((e) => {
+    const el = carouselRef.current;
+    if (!el) return;
+    cancelAnimationFrame(momentumRef.current);
+    setIsDragging(true);
+    dragState.current = {
+      startX: e.pageX - el.offsetLeft,
+      scrollLeft: el.scrollLeft,
+      clicked: true,
+      vel: 0,
+      lastX: e.pageX,
+      lastTime: performance.now(),
+    };
+    el.style.cursor = 'grabbing';
   }, []);
 
+  const onMouseMove = useCallback((e) => {
+    const el = carouselRef.current;
+    if (!el || !dragState.current.clicked) return;
+    e.preventDefault();
+    const x = e.pageX - el.offsetLeft;
+    const walk = (dragState.current.startX - x) * 1.2;
+    el.scrollLeft = dragState.current.scrollLeft + walk;
+
+    const now = performance.now();
+    const dt = now - dragState.current.lastTime;
+    if (dt > 0) {
+      const dx = e.pageX - dragState.current.lastX;
+      dragState.current.vel = dx / dt * 16;
+    }
+    dragState.current.lastX = e.pageX;
+    dragState.current.lastTime = now;
+  }, []);
+
+  const onMouseUp = useCallback(() => {
+    const el = carouselRef.current;
+    if (!el) return;
+    setIsDragging(false);
+    dragState.current.clicked = false;
+    el.style.cursor = 'grab';
+
+    const absVel = Math.abs(dragState.current.vel);
+    if (absVel > 0.3) {
+      const momentum = () => {
+        const vel = dragState.current.vel;
+        if (Math.abs(vel) < 0.1) return;
+        dragState.current.vel *= 0.95;
+        el.scrollLeft -= dragState.current.vel;
+        momentumRef.current = requestAnimationFrame(momentum);
+      };
+      momentumRef.current = requestAnimationFrame(momentum);
+    }
+  }, []);
+
+  useEffect(() => () => cancelAnimationFrame(momentumRef.current), []);
+
+  const scrollFleet = (dir) => {
+    carouselRef.current?.scrollBy({ left: dir * 320, behavior: 'smooth' });
+  };
+
   return (
-    <section className="fleet" id="estoque" style={{ overflow: 'hidden' }}>
+    <section className="fleet" id="estoque">
       <div className="section-head">
         <div>
           <span className="tag">Estoque selecionado</span>
@@ -75,16 +94,62 @@ const Fleet = () => {
         <p>Sedãs, SUVs, picapes e utilitários revisados. Quilometragem real, valores sob consulta e negociação facilitada com entrada + financiamento.</p>
       </div>
 
-      <div style={{ height: '400px', position: 'relative', display: 'flex', justifyContent: 'center' }}>
-        <Carousel
-          items={carouselItems}
-          baseWidth={320}
-          autoplay={true}
-          autoplayDelay={3500}
-          pauseOnHover={true}
-          loop={true}
-          round={false}
-        />
+      <div className="carousel-nav">
+        <div className="nav-btn" onClick={() => scrollFleet(-1)}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </div>
+        <div className="nav-btn" onClick={() => scrollFleet(1)}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+      </div>
+
+      <div className="carousel-wrap">
+        <div className={`carousel${isDragging ? ' dragging' : ''}`} ref={carouselRef}
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={onMouseUp}
+          onMouseLeave={onMouseUp}
+          onTouchStart={(e) => {
+            const touch = e.touches[0];
+            const me = new MouseEvent('mousedown', { pageX: touch.pageX, pageY: touch.pageY });
+            onMouseDown(me);
+          }}
+          onTouchMove={(e) => {
+            const touch = e.touches[0];
+            const me = new MouseEvent('mousemove', { pageX: touch.pageX, pageY: touch.pageY });
+            onMouseMove(me);
+          }}
+          onTouchEnd={onMouseUp}
+        >
+          {fleet.map((car, index) => {
+            const msg = encodeURIComponent(`Olá! Tenho interesse no ${car.make} ${car.name} do pátio da LF Veículos.`);
+            return (
+              <div className="car-card" key={index}>
+                <div className="car-visual">
+                  <div className="plate">LF · Seminovo</div>
+                  {car.badge && <span className="car-badge">{car.badge}</span>}
+                  <img src={`/carros/${car.img}`} alt={car.name} />
+                </div>
+                <div className="car-body">
+                  <div className="make">{car.make}</div>
+                  <h3>{car.name}</h3>
+                  <div className="car-specs">
+                    {car.specs.map((s, i) => <span key={i}>{s}</span>)}
+                  </div>
+                  <div className="car-foot">
+                    <div className="car-price">
+                      <div className="label">Valor</div>
+                      <div className="value">{car.price}</div>
+                    </div>
+                    <a className="car-link" href={`https://wa.me/5535998259732?text=${msg}`} target="_blank" rel="noopener noreferrer">
+                      Detalhes →
+                    </a>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

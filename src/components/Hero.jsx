@@ -1,5 +1,32 @@
 import React from 'react';
-import BorderGlow from './BorderGlow';
+import LogoLoop from './LogoLoop';
+import { SiFord, SiHonda, SiFiat, SiHyundai, SiVolkswagen, SiChevrolet, SiToyota, SiNissan, SiJeep, SiBmw, SiAudi, SiPorsche, SiVolvo, SiKia, SiMitsubishi, SiPeugeot, SiRenault, SiMaserati, SiFerrari, SiLamborghini, SiMini, SiChrysler } from 'react-icons/si';
+
+const carBrands = [
+  { node: <SiFord />, title: "Ford" },
+  { node: <SiHonda />, title: "Honda" },
+  { node: <SiFiat />, title: "Fiat" },
+  { node: <SiHyundai />, title: "Hyundai" },
+  { node: <SiVolkswagen />, title: "Volkswagen" },
+  { node: <SiChevrolet />, title: "Chevrolet" },
+  { node: <SiToyota />, title: "Toyota" },
+  { node: <SiNissan />, title: "Nissan" },
+  { node: <SiJeep />, title: "Jeep" },
+  { node: <SiBmw />, title: "BMW" },
+  { node: <SiAudi />, title: "Audi" },
+  { node: <SiPorsche />, title: "Porsche" },
+  { node: <SiVolvo />, title: "Volvo" },
+  { node: <SiKia />, title: "Kia" },
+  { node: <SiMitsubishi />, title: "Mitsubishi" },
+  { node: <SiPeugeot />, title: "Peugeot" },
+  { node: <SiRenault />, title: "Renault" },
+  { node: <SiMaserati />, title: "Maserati" },
+  { node: <SiFerrari />, title: "Ferrari" },
+  { node: <SiLamborghini />, title: "Lamborghini" },
+  { node: <SiMini />, title: "Mini" },
+  { node: <SiChrysler />, title: "Chrysler" },
+];
+
 const Hero = () => {
   return (
     <section className="hero">
@@ -13,7 +40,7 @@ const Hero = () => {
 
       <div className="hero-content">
         <div className="eyebrow">Extrema · Minas Gerais</div>
-        <h1>COMPRE<br/><span className="accent">VEICULOS</span> <span className="redline">EM EXTREMA</span></h1>
+        <h1>COMPRE SEU <span className="accent">VEÍCULO</span> NOVO OU <span className="redline">SEMINOVO</span><br/><span className="redline">EM EXTREMA</span></h1>
         <p className="sub">Curadoria de veículos seminovos selecionados peça por peça. Na LF Veículos, cada carro do pátio passa por inspeção completa antes de chegar até você — sofisticação, procedência e potência em cada detalhe.</p>
         <div className="hero-ctas">
           <a className="btn-glass solid" href="#estoque">Ver Estoque Completo</a>
@@ -22,30 +49,15 @@ const Hero = () => {
       </div>
 
       <div className="hero-meta">
-        <BorderGlow glowColor="350 80 40" backgroundColor="rgba(246,244,241,0.05)" borderRadius={4} glowRadius={30} edgeSensitivity={20} className="m" colors={['#e01a35', '#b8102a', '#ff4d6d']}>
-          <div style={{ padding: '18px 20px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', gap: '8px' }}>
-            <b>120 +</b>
-            <span>Veículos no pátio</span>
-          </div>
-        </BorderGlow>
-        <BorderGlow glowColor="350 80 40" backgroundColor="rgba(246,244,241,0.05)" borderRadius={4} glowRadius={30} edgeSensitivity={20} className="m" colors={['#e01a35', '#b8102a', '#ff4d6d']}>
-          <div style={{ padding: '18px 20px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', gap: '8px' }}>
-            <b>15 +</b>
-            <span>Anos de mercado nacional</span>
-          </div>
-        </BorderGlow>
-        <BorderGlow glowColor="350 80 40" backgroundColor="rgba(246,244,241,0.05)" borderRadius={4} glowRadius={30} edgeSensitivity={20} className="m" colors={['#e01a35', '#b8102a', '#ff4d6d']}>
-          <div style={{ padding: '18px 20px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', gap: '8px' }}>
-            <b>4.9 ★</b>
-            <span>Avaliação de clientes</span>
-          </div>
-        </BorderGlow>
-        <BorderGlow glowColor="350 80 40" backgroundColor="rgba(246,244,241,0.05)" borderRadius={4} glowRadius={30} edgeSensitivity={20} className="m" colors={['#e01a35', '#b8102a', '#ff4d6d']}>
-          <div style={{ padding: '18px 20px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', gap: '8px' }}>
-            <b>até 18:30</b>
-            <span>Atendimento hoje</span>
-          </div>
-        </BorderGlow>
+        <LogoLoop
+          logos={carBrands}
+          speed={80}
+          direction="left"
+          logoHeight={42}
+          gap={60}
+          hoverSpeed={20}
+          scaleOnHover={true}
+        />
       </div>
 
       <div className="scroll-cue"><div className="line"></div></div>

@@ -9,40 +9,46 @@ const MOBILE_BREAKPOINT = 768;
 
 const cardData = [
   {
-    color: '#120F17',
+    color: '#0a0908',
     title: 'Procedência verificada',
     description: 'Histórico completo, laudo cautelar e revisão mecânica antes de cada anúncio.',
-    label: 'Qualidade'
+    label: 'Qualidade',
+    img: 'qualidade.jpg'
   },
   {
-    color: '#120F17',
+    color: '#0a0908',
     title: 'Financiamento',
     description: 'Parcerias com os principais bancos para aprovação rápida e taxas competitivas.',
-    label: 'Facilidade'
+    label: 'Facilidade',
+    img: 'Facilidade.jpg'
   },
   {
-    color: '#120F17',
+    color: '#0a0908',
     title: 'Troca facilitada',
     description: 'Avaliamos seu usado no ato e usamos como parte do pagamento no veículo novo.',
-    label: 'Praticidade'
+    label: 'Praticidade',
+    img: 'Pratcdade.webp'
   },
   {
-    color: '#120F17',
+    color: '#0a0908',
     title: 'Atendimento',
     description: 'Consultores especializados para encontrar o veículo ideal para você.',
-    label: 'Suporte'
+    label: 'Suporte',
+    img: 'Suporte.jpg'
   },
   {
-    color: '#120F17',
+    color: '#0a0908',
     title: 'Garantia',
     description: 'Veículos com garantia para sua tranquilidade e segurança.',
-    label: 'Segurança'
+    label: 'Segurança',
+    img: 'Segurança.jpg'
   },
   {
-    color: '#120F17',
+    color: '#0a0908',
     title: 'Transparência',
     description: 'Negociação clara, sem letras miúdas, focada na sua satisfação.',
-    label: 'Confiança'
+    label: 'Confiança',
+    img: 'Confiança.jpeg'
   }
 ];
 
@@ -506,6 +512,7 @@ const MagicBento = ({
             className: baseClassName,
             style: {
               backgroundColor: card.color,
+              '--bg-img': `url(/confianca/${card.img})`,
               '--glow-color': glowColor
             }
           };
